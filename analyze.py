@@ -11,13 +11,11 @@ from sklearn.metrics import confusion_matrix,classification_report
 import string
 
 # Read in csv as dataframe
-df = pd.read_csv('defgh.csv')
+df = pd.read_csv('scraper4.csv')
 
 # Positive sentiment: reviews w/ scores > 3
-# Negative sentiment: reviews w/ scores < 3
-# (scores == 3 are removed because neutral)
-df = df[df['Score'] != 3]
-df['Sentiment'] = np.where(df['Score'] < 3, -1, 1)
+# Negative sentiment: reviews w/ scores <= 3
+df['Sentiment'] = np.where(df['Score'] <= 3, -1, 1)
 
 # Get positive reviews
 positive = df[df['Sentiment'] == 1]
@@ -40,7 +38,7 @@ for category, data in df.items():
             text = text.translate(None, string.punctuation)
 
 # Split dataframe into test and train sets: 80% for training, 20% for testing
-percentage = 0.8
+percentage = 0.7
 index = df.index
 df['rand_num'] = np.random.randn(len(index))
 train = df[df['rand_num'] <= percentage]
